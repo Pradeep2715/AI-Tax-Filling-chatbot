@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TaxBot - AI-Powered Tax Filing Assistant. Get personalized tax advice, regime comparisons, and filing guidance.">
+    <meta name="theme-color" content="#0a0e1a">
+    <title>TaxBot — AI-Powered Tax Filing Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Particle Background Canvas -->
+    <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+    <!-- ======================== AUTH SCREEN ======================== -->
+    <section id="auth-screen" class="screen" role="main" aria-label="Authentication">
+        <div class="auth-card glass" role="form" aria-label="Login or Register">
+            <div class="auth-logo">
+                <span class="auth-logo-icon" aria-hidden="true">
+                    <svg class="logo-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea; filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5)); margin-bottom: 8px;"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                </span>
+                <h1 class="gradient-text">TaxBot</h1>
+                <p class="auth-tagline">AI-Powered Tax Filing Assistant</p>
+            </div>
+
+            <!-- Tab Toggle -->
+            <div class="auth-tabs" role="tablist" aria-label="Authentication type">
+                <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="login-form" data-tab="login">Login</button>
+                <button class="auth-tab" id="tab-register" role="tab" aria-selected="false" aria-controls="register-form" data-tab="register">Register</button>
+                <div class="tab-indicator" aria-hidden="true"></div>
+            </div>
+
+            <!-- Message Area -->
+            <div id="auth-message" class="auth-message hidden" role="alert" aria-live="polite"></div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form" role="tabpanel" aria-labelledby="tab-login" autocomplete="on">
+                <div class="input-group">
+                    <span class="input-icon" aria-hidden="true">📧</span>
+                    <input type="email" id="login-email" placeholder="Email address" required autocomplete="email" aria-label="Email address">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon" aria-hidden="true">🔒</span>
+                    <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password" aria-label="Password">
+                    <button type="button" class="toggle-password" aria-label="Toggle password visibility" data-target="login-password">👁️</button>
+                </div>
+                <button type="submit" class="btn-primary btn-submit" aria-label="Login to your account">
+                    <span>Login</span>
+                    <span class="btn-loader hidden" aria-hidden="true"></span>
+                </button>
+                <p class="auth-switch">Don't have an account? <a href="#" id="switch-to-register">Create one</a></p>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form hidden" role="tabpanel" aria-labelledby="tab-register" autocomplete="on">
+                <div class="input-group">
+                    <span class="input-icon" aria-hidden="true">📧</span>
+                    <input type="email" id="register-email" placeholder="Email address" required autocomplete="email" aria-label="Email address">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon" aria-hidden="true">🔒</span>
+                    <input type="password" id="register-password" placeholder="Password" required autocomplete="new-password" aria-label="Password" minlength="6">
+                    <button type="button" class="toggle-password" aria-label="Toggle password visibility" data-target="register-password">👁️</button>
+                </div>
+                <div class="input-group">
+                    <span class="input-icon" aria-hidden="true">🔒</span>
+                    <input type="password" id="register-confirm-password" placeholder="Confirm Password" required autocomplete="new-password" aria-label="Confirm Password" minlength="6">
+                </div>
+                <button type="submit" class="btn-primary btn-submit" aria-label="Create your account">
+                    <span>Create Account</span>
+                    <span class="btn-loader hidden" aria-hidden="true"></span>
+                </button>
+                <p class="auth-switch">Already have an account? <a href="#" id="switch-to-login">Login here</a></p>
+            </form>
+
+            <!-- OTP Verification -->
+            <div id="otp-section" class="otp-section hidden" role="region" aria-label="OTP Verification">
+                <div class="otp-header">
+                    <span class="otp-icon" aria-hidden="true">📱</span>
+                    <h3>Verify Your Email</h3>
+                    <p class="otp-subtitle">Enter the 6-digit code sent to <span id="otp-email-display"></span></p>
+                </div>
+                <div class="otp-inputs" role="group" aria-label="One-time password digits">
+                    <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 1" data-index="0">
+                    <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 2" data-index="1">
+                    <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 3" data-index="2">
+                    <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 4" data-index="3">
+                    <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 5" data-index="4">
+                    <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 6" data-index="5">
+                </div>
+                <button type="button" id="verify-otp-btn" class="btn-primary btn-submit" aria-label="Verify OTP code">
+                    <span>Verify OTP</span>
+                    <span class="btn-loader hidden" aria-hidden="true"></span>
+                </button>
+                <div class="otp-footer">
+                    <span id="otp-timer" class="otp-timer">02:00</span>
+                    <button type="button" id="resend-otp-btn" class="otp-resend" disabled aria-label="Resend OTP code">Resend OTP</button>
+                </div>
+            </div>
+            <div class="footer-copyright">All rights reserved to Pradeep &copy; 2026</div>
+        </div>
+    </section>
+
+    <!-- ======================== MAIN APP SCREEN ======================== -->
+    <section id="app-screen" class="screen hidden" role="main" aria-label="Tax Filing Chatbot">
+
+        <!-- App Header -->
+        <header id="app-header" class="glass" role="banner">
+            <div class="header-left">
+                <span class="header-logo" aria-hidden="true">
+                    <svg class="logo-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea; filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.45)); margin-right: 2px; vertical-align: middle;"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                </span>
+                <span class="header-title gradient-text">TaxBot</span>
+            </div>
+            <div class="header-center">
+                <span id="user-email-display" class="header-email" aria-label="Logged in user"></span>
+            </div>
+            <div class="header-right">
+                <button id="history-btn" class="header-action-btn" aria-label="View tax history" title="Tax History">
+                    <span>📋</span>
+                </button>
+                <button id="new-chat-btn" class="header-action-btn" aria-label="Start new chat session" title="New Chat">
+                    <span>➕</span>
+                </button>
+                <button id="logout-btn" class="header-action-btn header-action-btn--danger" aria-label="Logout" title="Logout">
+                    <span>🚪</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- History Sidebar -->
+        <aside id="history-sidebar" class="glass" role="complementary" aria-label="Tax History Sidebar" aria-hidden="true">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">📋 Your Tax History</h2>
+                <button id="close-sidebar-btn" class="sidebar-close" aria-label="Close history sidebar">✕</button>
+            </div>
+            <div id="history-list" class="sidebar-list" role="list" aria-label="Past tax sessions">
+                <!-- History items populated by JS -->
+            </div>
+            <div id="history-empty" class="sidebar-empty hidden">
+                <span aria-hidden="true">📭</span>
+                <p>No tax sessions yet. Start chatting to get personalized tax advice!</p>
+            </div>
+            <div id="history-loading" class="sidebar-loading hidden" aria-label="Loading history">
+                <div class="shimmer-block"></div>
+                <div class="shimmer-block"></div>
+                <div class="shimmer-block"></div>
+            </div>
+        </aside>
+
+        <!-- Chat Container -->
+        <div id="chat-container" role="region" aria-label="Chat conversation">
+            <!-- Messages Area -->
+            <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
+                <!-- Messages populated by JS -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typing-indicator" class="typing-indicator hidden" aria-label="Bot is typing" role="status">
+                <div class="typing-avatar" aria-hidden="true">🤖</div>
+                <div class="typing-dots">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div id="suggestions" class="suggestions" role="group" aria-label="Suggested replies">
+                <!-- Suggestion chips populated by JS -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area glass" role="form" aria-label="Message input">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." autocomplete="off" aria-label="Type your message">
+                <button id="send-btn" class="send-btn" aria-label="Send message" title="Send">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <div class="footer-copyright">All rights reserved to Pradeep &copy; 2026</div>
+        </div>
+    </section>
+
+    <!-- ======================== SESSION DETAIL MODAL ======================== -->
+    <div id="session-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="session-modal-title">
+        <div class="modal-card glass" role="document">
+            <div class="modal-header">
+                <div>
+                    <h2 id="session-modal-title" class="modal-title">Session Details</h2>
+                    <p id="session-modal-date" class="modal-subtitle"></p>
+                </div>
+                <button id="close-modal-btn" class="modal-close" aria-label="Close session details">✕</button>
+            </div>
+            <div id="session-modal-messages" class="modal-messages" role="log" aria-label="Session chat history">
+                <!-- Session messages replayed by JS -->
+            </div>
+            <div id="session-modal-summary" class="modal-summary">
+                <!-- Tax summary rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/chat.js"></script>
+</body>
+</html>
